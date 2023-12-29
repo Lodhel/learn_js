@@ -1,0 +1,11 @@
+.venv
+.vscode
+.idea/
+__pycache__/
+app.db-journal
+
+node_modules
+
+*.db
+*.pyc
+*.log
