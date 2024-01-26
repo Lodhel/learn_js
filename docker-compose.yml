@@ -4,10 +4,24 @@ services:
     build: ./backend
     container_name: backend
     ports:
-      - '4010:4000'
+      - '4000:4000'
     volumes:
       - ./backend:/app
       - ./app/node_modules
+    depends_on:
+        - mongodb
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    volumes:
+        - ./mongod/mongod.conf:/etc/mongod.conf
+    ports:
+      - "27017:27017"
+    logging:
+      driver: none
+    entrypoint: ["mongod","--config","/etc/mongod.conf"]
+
   frontend:
     build: ./frontend
     container_name: frontend
