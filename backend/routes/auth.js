@@ -4,9 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
-// @route   POST api/auth/register
-// @desc    Register user
-// @access  Public
+
 router.post('/register', (req, res) => {
   const { name, email, password } = req.body;
 
@@ -35,7 +33,7 @@ router.post('/register', (req, res) => {
             .then(user => {
               jwt.sign(
                 { id: user.id },
-                'your_jwt_secret', // Use an environment variable for the secret
+                '12345678', // variable for the secret
                 { expiresIn: 3600 },
                 (err, token) => {
                   if(err) throw err;
