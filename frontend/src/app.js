@@ -87,7 +87,6 @@ const Header = () => {
       <input className="search-input" type="text" placeholder="Search" />
       <button onClick={openModal} className="login-button">Войти</button>
       {isModalOpen && <Modal closeModal={closeModal} />}
-    <input className="search-input" type="text" placeholder="Search" />
     </div>
   );
 };
