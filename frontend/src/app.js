@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './styles/main.css';
 import product1Image from './assets/product1.png';
 import product2Image from './assets/product2.png';
@@ -37,7 +37,7 @@ const handleAddToCart = () => {};
 const handleRemoveFromCart = () => {};
 
 // Обновлённый компонент контента с блоками
-const Content = ({ onAddToCart, onRemoveFromCart }) => (
+const Content = ({ onAddToCart, onRemoveFromCart, cartItems }) => (
   <div className="content">
     <ContentBlock
       title="Смартфон X12"
@@ -52,6 +52,7 @@ const Content = ({ onAddToCart, onRemoveFromCart }) => (
       image={product1Image}
       onAddToCart={onAddToCart}
       onRemoveFromCart={onRemoveFromCart}
+      cartItems={cartItems}
     />
     <ContentBlock
       title="Элегантная Сумка Parisienne"
@@ -63,13 +64,21 @@ const Content = ({ onAddToCart, onRemoveFromCart }) => (
       image={product2Image}
       onAddToCart={onAddToCart}
       onRemoveFromCart={onRemoveFromCart}
+      cartItems={cartItems}
     />
   </div>
 );
 
 // Компонент для отдельного блока контента
-const ContentBlock = ({ id, title, description, price, image, onAddToCart, onRemoveFromCart }) => {
+const ContentBlock = ({ id, title, description, price, image, onAddToCart, onRemoveFromCart, cartItems }) => {
   const [inCart, setInCart] = useState(false);
+
+  useEffect(() => {
+    if (cartItems) {
+      const isItemInCart = cartItems.some(item => item.id === id);
+      setInCart(isItemInCart);
+    }
+  }, [cartItems, id]);
 
   const addToCart = () => {
     onAddToCart({ id, title, price, image });
@@ -149,14 +158,14 @@ function App() {
     };
 
     return (
-      <div>
-        <Header />
-        <MainSection />
-        <Content onAddToCart={handleAddToCart} onRemoveFromCart={handleRemoveFromCart} />
-        <Cart cartItems={cartItems} onRemoveFromCart={handleRemoveFromCart} />
-        <NavBar />
-      </div>
-    );
+        <div>
+          <Header />
+          <MainSection />
+          <Content onAddToCart={handleAddToCart} onRemoveFromCart={handleRemoveFromCart} cartItems={cartItems} />
+          <Cart cartItems={cartItems} onRemoveFromCart={handleRemoveFromCart} />
+          <NavBar />
+        </div>
+      );
 }
 
 export default App;

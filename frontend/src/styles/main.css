@@ -102,15 +102,17 @@
 }
 .cart-container {
   position: fixed;
-  top: 55%;
-  right: 1%;
-  width: 5%;
-  height: 25%;
-  background-color: #fff;
-  border-left: 1px solid #ddd;
+  top: 10%; /* Немного поднимаем корзину */
+  right: 1%; /* Небольшое смещение от правого края */
+  width: 300px; /* Увеличиваем ширину */
+  height: auto; /* Автоматическая высота */
+  max-height: 80%; /* Максимальная высота, чтобы не выходило за пределы экрана */
+  background-color: #f9f9f9; /* Светлый фон */
+  border: 1px solid #ccc; /* Легкая граница */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Усиленная тень для лучшей видимости */
   padding: 20px;
-  box-shadow: -2px 0 4px rgba(0,0,0,0.1);
-  overflow-y: auto;
+  overflow-y: auto; /* Прокрутка, если содержимое слишком большое */
+  border-radius: 8px; /* Скругление углов */
 }
 
 .cart-item {
@@ -139,4 +141,10 @@
   margin-top: 10px;
   cursor: pointer;
   border-radius: 4px;
+}
+
+.cart-item-details {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column; /* Элементы в колонке для лучшего чтения */
 }
