@@ -4,13 +4,93 @@ import product1Image from './assets/product1.png';
 import product2Image from './assets/product2.png';
 
 
-// Компонент шапки сайта
-const Header = () => (
-  <div className="header">
-    <span className="logo">Home</span>
+
+const Modal = ({ closeModal }) => {
+  const handleLogin = (event) => {
+    event.preventDefault();
+    closeModal();
+  };
+
+  return (
+    <div className="modal">
+      <div className="modal-content">
+        <span className="close" onClick={closeModal}>&times;</span>
+        <h2>Вход в систему</h2>
+        <form onSubmit={handleLogin}>
+          <div className="form-group">
+            <label htmlFor="username">Имя пользователя:</label>
+            <input type="text" id="username" name="username" required />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Пароль:</label>
+            <input type="password" id="password" name="password" required />
+          </div>
+          <div className="form-group">
+            <button type="submit" className="login-button">Войти</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+
+const UserProfile = () => {
+  const [user, setUser] = useState({
+    name: 'Имя пользователя',
+    email: 'email@example.com'
+    // Другие поля пользователя
+  });
+
+  const handleChange = (e) => {
+    setUser({...user, [e.target.name]: e.target.value});
+  }
+
+  return (
+    <div className="user-profile">
+      <h2>Личный Кабинет</h2>
+      <form>
+        <div>
+          <label>Имя:</label>
+          <input
+            type="text"
+            name="name"
+            value={user.name}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label>Электронная почта:</label>
+          <input
+            type="email"
+            name="email"
+            value={user.email}
+            onChange={handleChange}
+          />
+        </div>
+        {/* Другие поля формы */}
+        <button type="submit">Сохранить изменения</button>
+      </form>
+    </div>
+  );
+};
+
+const Header = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  return (
+    <div className="header">
+      <span className="logo">Home</span>
+      <input className="search-input" type="text" placeholder="Search" />
+      <button onClick={openModal} className="login-button">Войти</button>
+      {isModalOpen && <Modal closeModal={closeModal} />}
     <input className="search-input" type="text" placeholder="Search" />
-  </div>
-);
+    </div>
+  );
+};
 
 // Компонент карточки товара
 const ProductCard = ({ icon, label }) => (
