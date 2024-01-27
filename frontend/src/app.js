@@ -36,18 +36,50 @@ const MainSection = () => (
 const handleAddToCart = () => {};
 const handleRemoveFromCart = () => {};
 
-// Компонент для отдельного блока контента
-const ContentBlock = ({ title, description, price,image }) => {
-  const [inCart, setInCart] = useState(false);
-  const addToCart = () => {
-    handleAddToCart();
-    setInCart(true);
-    };
+// Обновлённый компонент контента с блоками
+const Content = ({ onAddToCart, onRemoveFromCart }) => (
+  <div className="content">
+    <ContentBlock
+      title="Смартфон X12"
+      description="Откройте для себя мир высоких технологий с Смартфоном X12.
+      Этот телефон предлагает передовой процессор,
+      ультра-яркий экран и инновационную систему камер,
+       которая позволяет делать потрясающие снимки.
+       Батарея повышенной емкости обеспечивает длительное время работы,
+        а элегантный дизайн делает его не просто устройством, а модным аксессуаром."
+      id={1}
+      price="$349"
+      image={product1Image}
+      onAddToCart={onAddToCart}
+      onRemoveFromCart={onRemoveFromCart}
+    />
+    <ContentBlock
+      title="Элегантная Сумка Parisienne"
+      description="Почувствуйте дух Парижа с Элегантной Сумкой Parisienne.
+       Созданная из высококачественной кожи, эта сумка сочетает в себе классику и современные тенденции моды.
+       Сумка оснащена просторным основным отделением и дополнительными карманами, что делает её идеальной для работы и путешествий."
+      id={2}
+      price="$450"
+      image={product2Image}
+      onAddToCart={onAddToCart}
+      onRemoveFromCart={onRemoveFromCart}
+    />
+  </div>
+);
 
-    const removeFromCart = () => {
-        handleRemoveFromCart();
-        setInCart(false);
-    };
+// Компонент для отдельного блока контента
+const ContentBlock = ({ id, title, description, price, image, onAddToCart, onRemoveFromCart }) => {
+  const [inCart, setInCart] = useState(false);
+
+  const addToCart = () => {
+    onAddToCart({ id, title, price, image });
+    setInCart(true);
+  };
+
+  const removeFromCart = () => {
+    onRemoveFromCart(id);
+    setInCart(false);
+  };
 
   return (
     <div className="content-block">
@@ -72,31 +104,6 @@ const ContentBlock = ({ title, description, price,image }) => {
   );
 };
 
-// Обновлённый компонент контента с блоками
-const Content = () => (
-  <div className="content">
-    <ContentBlock
-      title="Смартфон X12"
-      description="Откройте для себя мир высоких технологий с Смартфоном X12.
-      Этот телефон предлагает передовой процессор,
-      ультра-яркий экран и инновационную систему камер,
-       которая позволяет делать потрясающие снимки.
-       Батарея повышенной емкости обеспечивает длительное время работы,
-        а элегантный дизайн делает его не просто устройством, а модным аксессуаром."
-      price="$349"
-      image={product1Image}
-    />
-    <ContentBlock
-      title="Элегантная Сумка Parisienne"
-      description="Почувствуйте дух Парижа с Элегантной Сумкой Parisienne.
-       Созданная из высококачественной кожи, эта сумка сочетает в себе классику и современные тенденции моды.
-       Сумка оснащена просторным основным отделением и дополнительными карманами, что делает её идеальной для работы и путешествий."
-      price="$450"
-      image={product2Image}
-    />
-  </div>
-);
-
 const Cart = ({ cartItems, onRemoveFromCart }) => {
   return (
     <div className="cart-container">
@@ -110,7 +117,7 @@ const Cart = ({ cartItems, onRemoveFromCart }) => {
             <div className="cart-item-details">
               <h4>{item.title}</h4>
               <p>${item.price}</p>
-              <button onClick={() => onRemoveFromCart(item)} className="remove-item-button">
+              <button onClick={() => onRemoveFromCart(item.id)} className="remove-item-button">
                 Remove
               </button>
             </div>
@@ -131,12 +138,22 @@ const NavBar = () => (
 
 
 function App() {
+    const [cartItems, setCartItems] = useState([]);
+
+    const handleAddToCart = (product) => {
+        setCartItems(prevItems => [...prevItems, product]);
+    };
+
+    const handleRemoveFromCart = (id) => {
+        setCartItems(prevItems => prevItems.filter(item => item.id !== id));
+    };
+
     return (
       <div>
         <Header />
         <MainSection />
-        <Content />
-        <Cart cartItems={handleAddToCart} onRemoveFromCart={handleRemoveFromCart} />
+        <Content onAddToCart={handleAddToCart} onRemoveFromCart={handleRemoveFromCart} />
+        <Cart cartItems={cartItems} onRemoveFromCart={handleRemoveFromCart} />
         <NavBar />
       </div>
     );
